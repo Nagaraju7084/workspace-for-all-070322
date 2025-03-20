@@ -1,0 +1,4 @@
+server:  port: 5009
+spring:
+  application:
+    name: shopifyme-api-gateway  cloud:    gateway:      discovery:        locator:          enabled: true          lower-case-service-id: true      routes:        - id: shopifyme-categories-service          uri: lb://SHOPIFYME-CATEGORIES-SERVICE          predicates:           - Path=/shopifyme-gateway/api/mycategories/**          filters:           - RewritePath=/shopifyme-gateway/api/mycategories/(?<segment>.*),/${segment}      management:  endpoints:    web:      exposure:        include: "*"shopifyme:  provider:    wso2:      base_uri: https://${WSO2_IAM_HOST:localhost}:${WSO2_IAM_PORT:9443}      headerName: Authorization      headerType: Bearer

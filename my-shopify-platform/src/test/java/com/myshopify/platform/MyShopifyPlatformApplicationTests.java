@@ -1,0 +1,13 @@
+package com.myshopify.platform;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class MyShopifyPlatformApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}

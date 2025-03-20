@@ -1,0 +1,91 @@
+package com.ydsworld.casetracker.config;
+
+import com.ydsworld.casetracker.audit.AuditorAwareImpl;
+import com.ydsworld.casetracker.common.enm.Role;
+import com.ydsworld.casetracker.controller.LoginController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
+
+@Configuration
+@EnableWebSecurity
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private LoginController loginController;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .csrf().disable()
+            .authorizeRequests()
+                .antMatchers("/office/settings*", "/office/*settings", "/office/settings/*")
+                .hasAnyAuthority(Role.GROUP_ADMIN.toString(), Role.USER_ADMIN.toString(), Role.SUPERADMIN.toString())
+                .antMatchers("/webjars/**","/style/**","/min/**", "/fonts/**","/js/**","/image/**","/favicon.ico",
+                        "/user/confirmRegistration", "/user/badUser","/user/forgetPassword","/fhs/forgetPassword",
+                        "/user/resetPassword","/user/validateEmail","/office/confirmOfficeRegistration", "/office/sendOfficeEmailRegistrationNewMail", "/office/validateOfficeEmail","/login*","/").permitAll()
+                .antMatchers("/user/resetPassword*","/user/savePassword*","/updatePassword*").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
+                .antMatchers("/user/profile",
+                        "/user/id/*/**", "/user/getUserFeeSettings","/user/appointmentType","/user/getAllProviderUsers","/user/getUserSuperbillSettings","/feed/**",
+                        "/dashboard",
+                        "/case/currentUser",
+                        "/user/*/getProfilePic",
+                        "/user/getProfilePic",
+                        "/alert/**",
+                        "/schedule/**",
+                        "/case/id/**","/case/**").hasAnyAuthority(Role.MEMBER.toString(), Role.NON_MEMBER.toString())
+                .antMatchers("/user/create").hasAnyAuthority(Role.SUPERADMIN.toString(),Role.USER_ADMIN.toString())
+                .antMatchers("/demo/**" ).hasAnyAuthority(Role.SUPERADMIN.toString(),Role.INTERNAL_USER.toString(),Role.NON_MEMBER.toString())
+                .antMatchers("/**").hasAnyAuthority(Role.MEMBER.toString())
+                .anyRequest().authenticated()
+                .and()
+            .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/case")
+                .permitAll()
+                .and()
+            .logout()
+                .logoutUrl("/logout")
+                /*.logoutSuccessUrl("/login")*/
+                .logoutSuccessHandler(loginController)
+                .permitAll().and().sessionManagement()
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(true).sessionRegistry(sessionRegistry());
+    }
+
+
+    @Autowired
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(new BCryptPasswordEncoder());
+
+    }
+
+    @Bean
+    public AuditorAware<String> auditorAware() {
+        return new AuditorAwareImpl();
+
+    }
+    
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        SessionRegistry sessionRegistry = new SessionRegistryImpl();
+        return sessionRegistry;
+    }
+}

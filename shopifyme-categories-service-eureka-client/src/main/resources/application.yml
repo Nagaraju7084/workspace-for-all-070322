@@ -1,0 +1,47 @@
+server:
+  port: '${CATEGORIES_SERVICE_PORT:5001}'
+spring:
+  zipkin:
+    base-url: http://127.0.0.1:9411/
+  application:
+    name: shopifyme-categories-service
+  datasource:
+    password: '${CATEGORIES_DB_PASSWORD:root}'
+    url: jdbc:${CATEGORIES_DB_TYPE:mysql}://${CATEGORIES_DB_HOST:localhost}:${CATEGORIES_DB_PORT:3306}/${CATEGORIES_DB_NAME:shopifyme-categories-service}
+    username: '${CATEGORIES_DB_USERNAME:root}'
+  jpa:
+    hibernate:
+      ddl-auto: '${CATEGORIES_DB_DDL_AUTO:update}'
+    properties:
+      hibernate:
+        dialect: '${CATEGORIES_DB_DIALECT:org.hibernate.dialect.MySQL8Dialect}'
+        format_sql: '${CATEOGRIES_DB_FORMAT_SQL:true}'
+    show-sql: '${CATEOGRIES_DB_SHOW_SQL:false}'
+  # enable multipart uploads
+  servlet:
+    multipart:
+      enabled: true
+      
+      # threshold after which files are written to disk
+      file-size-threshold: 2KB
+      
+      # max file size
+      max-file-size: 200MB
+      
+      # max request size
+      max-request-size: 215MB
+  rabbitmq:
+    host: puffin.rmq2.cloudamqp.com
+    virtual-host: zgncxdkq
+    username: zgncxdkq
+    password: CWWjbR-bw1o7fUOVSgtCcg0_P0873rjQ
+    template:
+      exchange: category-updates-exchanger
+      routing-key: category-updates-routingKey
+file:
+  storage:
+    location: '${CATEGORIES_FILES_STORAGE:D:/filestorage}'      
+
+#spriagger-ui custom path
+springdoc:
+  swagger-ui.path: /swagger-ui.html

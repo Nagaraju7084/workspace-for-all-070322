@@ -1,0 +1,25 @@
+package com.shopifyme.gateway;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.shopifyme.gateway.outbound.UserManagementClient;
+
+@SpringBootTest
+class ShopifymeApiGatewayApplicationTests {
+
+	@Autowired
+	private UserManagementClient usermgmtClient;
+	
+	@Test
+	void contextLoads() {
+	}
+
+	@Test
+	public void validateToken() {
+		String accessToken = "eyJ4NXQiOiJNell4TW1Ga09HWXdNV0kwWldObU5EY3hOR1l3WW1NNFpUQTNNV0kyTkRBelpHUXpOR00wWkdSbE5qSmtPREZrWkRSaU9URmtNV0ZoTXpVMlpHVmxOZyIsImtpZCI6Ik16WXhNbUZrT0dZd01XSTBaV05tTkRjeE5HWXdZbU00WlRBM01XSTJOREF6WkdRek5HTTBaR1JsTmpKa09ERmtaRFJpT1RGa01XRmhNelUyWkdWbE5nX1JTMjU2IiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJhZG1pbiIsImF1dCI6IkFQUExJQ0FUSU9OIiwiYXVkIjoiT3lzV2piUUJqcExMdVFaenhNUzV2UzVWcnVZYSIsIm5iZiI6MTY1OTg1MzUzOCwiYXpwIjoiT3lzV2piUUJqcExMdVFaenhNUzV2UzVWcnVZYSIsImlzcyI6Imh0dHBzOlwvXC9sb2NhbGhvc3Q6OTQ0M1wvb2F1dGgyXC90b2tlbiIsImV4cCI6MTY1OTg1NzEzOCwiaWF0IjoxNjU5ODUzNTM4LCJqdGkiOiI5OGU2Zjk1ZS05YjY5LTQyMjktOGUxYS05MTNiZDAwNDIxNzUifQ.HXhR_EQ8RnTtWg5uyohDS4nqgBJsUK6hQ6eVVGCBQoJZG2-vP5y8NoHsWPRKj7dDnStbR8ORc4cG0lHEiHoPgFMKyQZZ3quchBW3REe00193BT5ORGOYRAaxrTDNx5jQ05xaV1ts-Gt-Oj0j4P7kyQQ_qXsx7sY1f_EwpFJv30TgezIptUqXlPBR_hqNiHxY9ZqDp_c1uWZLhPxwdPL353JMhh5BRAf26Zt-juaei2CPbvN9kXLdWPofod-ZNsXaGR2VZo14cjphak_xOrt9BKmnOKyWBasBt5OJKy8Ih58VV9gb1s4gxFtVGEWpgUl1ClLuL4x9Cl75SixpF7TCmw";
+		Object userInfo = usermgmtClient.getLoggedInUserInfo(accessToken);
+		System.out.println("user info :\t"+userInfo);
+	}
+}

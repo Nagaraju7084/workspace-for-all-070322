@@ -1,0 +1,82 @@
+spring:
+  application:
+    name: medi-doctors-schedule-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: root
+    url: jdbc:mysql://localhost:3306/doctors-schedule-service
+    username: root
+    hikari:
+      maximum-pool-size: 20
+  jpa:
+    generate-ddl: true
+    show-sql: true
+  profiles: dev
+    
+server:
+  port: 5007
+springdoc:
+  swagger-ui:
+    path: /swagger-ui-dev.html
+---
+spring:
+  application:
+    name: medi-doctors-schedule-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: root
+    url: jdbc:mysql://localhost:3306/doctors-schedule-service
+    username: root
+  jpa:
+    generate-ddl: true
+    show-sql: true
+  profiles: qa
+   
+server:
+  port: 5008
+springdoc:
+  swagger-ui:
+    path: /swagger-ui-qa.html
+---
+spring:
+  application:
+    name: medi-doctors-schedule-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: root
+    url: jdbc:mysql://localhost:3306/doctors-schedule-service
+    username: root
+  jpa:
+    generate-ddl: true
+    show-sql: true
+  profiles: uat
+   
+server:
+  port: 5009
+springdoc:
+  swagger-ui:
+    path: /swagger-ui-uat.html
+---
+spring:
+  application:
+    name: medi-doctors-schedule-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: root
+    url: jdbc:mysql://localhost:3306/doctors-schedule-service
+    username: root
+  jpa:
+    generate-ddl: true
+    show-sql: true
+  profiles: prod
+   
+server:
+  port: 5010
+springdoc:
+  swagger-ui:
+    path: /swagger-ui-prod.html
+---
+spring:
+  profiles:
+    active:
+    - qa

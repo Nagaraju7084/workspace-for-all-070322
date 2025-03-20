@@ -1,0 +1,13 @@
+package com.boot.dyna;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class SpringbootDynamoDbExampleApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}

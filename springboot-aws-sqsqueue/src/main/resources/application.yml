@@ -1,0 +1,9 @@
+cloud:
+  aws:
+    region:
+      static: ap-south-1
+      auto: false
+    credentials:      access-key: AKIAT2S7MNE3TYIPTJO6
+      secret-key: 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
+    end-point: https://sqs.ap-south-1.amazonaws.com/263266789687/weshopify-queue 
+      

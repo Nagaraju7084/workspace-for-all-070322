@@ -1,0 +1,1 @@
+CREATE SCHEMA `doctors-schedule-service` ;

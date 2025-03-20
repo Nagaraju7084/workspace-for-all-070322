@@ -1,0 +1,72 @@
+server:
+  port: '${BRANDS_PORT:5002}'
+spring:
+  zipkin:
+    base-url: http://127.0.0.1:9411/
+  application:
+    name: shopifyme-brand-service
+  datasource:
+    password: '${BRANDS_DB_PASSWORD:root}'
+    url: jdbc:${BRANDS_DB_TYPE:mysql}://${BRANDS_DB_HOST:localhost}:${BRANDS_DB_PORT:3306}/${BRANDS_DB_NAME:shopifyme-product-brand-service}
+    username: '${BRANDS_DB_USERNAME:root}'
+  jpa:
+    hibernate:
+      ddl-auto: '${BRANDS_DB_DDL_AUTO:update}'
+    properties:
+      hibernate:
+        dialect: '${BRANDS_DB_DIALECT:org.hibernate.dialect.MySQL8Dialect}'
+        format_sql: '${BRANDS_DB_FORMAT_SQL:true}'
+    show-sql: '${BRANDS_DB_SHOW_SQL:false}'
+  rabbitmq:
+    host: puffin.rmq2.cloudamqp.com
+    virtual-host: zgncxdkq
+    username: zgncxdkq
+    password: CWWjbR-bw1o7fUOVSgtCcg0_P0873rjQ
+       
+#outbound api communicator uris
+outbound:
+  api:
+    categories:
+      uri: http://localhost:5001/api/v1/categories?sortDir=ASC
+
+amqp:
+  services:
+    category-service-queue: category-updates-queue    
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    
+# swagger-ui custom path
+springdoc:
+  swagger-ui.path: /swagger-ui.html
+  
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+    instances:
+      brands-categories-circuit:
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 3000
+        permitted-number-of-calls-in-half-open-state: 2
+  retry:
+    instances:
+      product-categories-retry:
+        max-attempts: 3
+        wait-duration: 5s
+  ratelimiter:
+    instances:
+      product-category-rate-limiter:
+        register-health-indicator: true
+        timeout-duration: 3s
+        limit-for-period: 2
+        limit-refresh-period: 5s
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
