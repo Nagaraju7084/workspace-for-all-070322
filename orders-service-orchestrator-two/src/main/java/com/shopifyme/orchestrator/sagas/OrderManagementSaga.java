@@ -38,7 +38,7 @@ public class OrderManagementSaga {
         System.out.println("order id" + orderCreatedEvent.orderId);
 
         //send the commands
-        commandGateway.send(new CreateInvoiceCommand(paymentId, orderCreatedEvent.orderId,orderCreatedEvent.price));
+        commandGateway.send(new CreateInvoiceCommand(paymentId, orderCreatedEvent.orderId, orderCreatedEvent.price));
         
         System.out.println("Dispathed  CreateInvoiceCommand");
     }
